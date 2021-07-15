@@ -1,7 +1,5 @@
 package br.com.erudio.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.erudio.model.Book;
+import br.com.erudio.repository.BookRepository;
 
 @RestController
 @RequestMapping("book-service")
@@ -18,6 +17,9 @@ public class BookController {
 	@Autowired
 	private Environment envirnment;
 	
+	@Autowired
+	public BookRepository repository;
+	
 
 	@GetMapping(value="/{id}/{currency}")
 	public Book findBook(
@@ -25,9 +27,11 @@ public class BookController {
 			@PathVariable("currency") String currency
 			) {
 		
-		var port = envirnment.getProperty("local.server.port");
+		var book = repository.getById(id);
+		if(book == null) throw new RuntimeException("Book not Found");
 		
-		return new Book(1L,"Nigel Poulton","Docker Deep Dive",new Date(),
-				Double.valueOf(13.7),currency,port);
+		var port = envirnment.getProperty("local.server.port");
+		book.setEnviroment(port);
+		return book;
 	}
 }
