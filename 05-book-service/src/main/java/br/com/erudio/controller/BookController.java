@@ -1,26 +1,22 @@
 package br.com.erudio.controller;
 
-import java.util.HashMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import br.com.erudio.model.Book;
 import br.com.erudio.proxy.CambioProxy;
 import br.com.erudio.repository.BookRepository;
-import br.com.erudio.response.Cambio;
 
 @RestController
 @RequestMapping("book-service")
 public class BookController {
 
 	@Autowired
-	private Environment envirnment;
+	private Environment environment;
 
 	@Autowired
 	public BookRepository repository;
@@ -37,8 +33,8 @@ public class BookController {
 
 		var cambio = proxy.getCambio(book.getPrice(), "USD", currency);
 
-		var port = envirnment.getProperty("local.server.port");
-		book.setEnviroment(port + " FEIGN");
+		var port = environment.getProperty("local.server.port");
+		book.setEnviroment(port + " FEIGN ");
 		book.setPrice(cambio.getConvertedValue());
 		return book;
 	}
@@ -61,7 +57,7 @@ public class BookController {
 	 * 
 	 * var cambio = response.getBody();
 	 * 
-	 * var port = envirnment.getProperty("local.server.port");
+	 * var port = environment.getProperty("local.server.port");
 	 * book.setEnviroment(port); book.setPrice(cambio.getConvertedValue()); return
 	 * book; }
 	 */

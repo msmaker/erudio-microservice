@@ -23,10 +23,12 @@ public class CambioController {
 	@Autowired
 	private CambioRepository repository;
 
-	// http://localhost:8000/cambio-service/5/USD/BRL
 	@GetMapping(value = "{amount}/{from}/{to}")
-	public Cambio getCambio(@PathVariable("amount") BigDecimal amount, @PathVariable("from") String from,
-			@PathVariable("to") String to) {
+	public Cambio getCambio(
+			@PathVariable("amount") BigDecimal amount, 
+			@PathVariable("from") String from,
+			@PathVariable("to") String to
+			) {
 
 		
 		var cambio = repository.findByFromAndTo(from, to);
